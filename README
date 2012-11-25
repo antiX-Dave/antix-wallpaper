@@ -1,0 +1,13 @@
+copy antix-session to ~/.antix-session
+cp ./antix-session ~/.antix-session -r
+as root copy wallpaper.py to /usr/local/bin
+cp ./wallpaper.py /usr/local/bin/wallpaper.py
+and give it execute permissions
+chmod 755 /usr/local/bin/wallpaper.py
+cp ./desktop_tool.py /usr/local/bin/desktop_tool.py
+and give it execute permissions
+chmod 755 /usr/local/bin/desktop_tool.py
+cp ./login-background.sh /usr/local/bin/login-background.sh
+and give it execute permissions
+chmod 755 /usr/local/bin/login-background.sh
+

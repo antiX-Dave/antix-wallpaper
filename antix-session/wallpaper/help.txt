@@ -1,0 +1,17 @@
+Choose how to apply:
+This is the default option, it will allow you to choose the default wallpaper folder by pressing the open button.
+
+Center:
+This option will set a static wallpaper centerd on the desktop. Choose the wallpaper by pressing the open button.
+
+Fill:
+This option will set a static wallpaper filling the desktop. Choose the wallpaper by pressing the open button.
+
+Scale:
+This option will set a static wallpaper scalled to fit the desktop. Choose the wallpaper by pressing the open button.
+
+No Wallpaper:
+This option will set the desktop to color only. Select the color by pressing the open button.
+
+Random Wallpaper:
+This option will set a random wallpaper on every login. The default folder can be set by pressing the open button.

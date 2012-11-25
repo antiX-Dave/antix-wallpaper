@@ -1,11 +1,12 @@
 #!/usr/bin/env python
-# Dependencies: feh, rox (pinboard), randwallpaper.sh, login_background.sh,
-#               gtk, pygtk
+# Dependencies: feh, rox (pinboard), login-background.sh, gtk, pygtk,
+# xset-root, desktop_tool, python os mod, python re mod, python sys mod
 # File Name: wallpaper.py
-# Version: 1.5.0
+# Version: 2.0
 # Purpose: allows the user to select a meathod for setting the wallpaper, 
 #          as well as a wallpaper / color / default folder based on their
-#          choice of options
+#          choice of options. Requires window manager session codename to
+#          be recorded in $DESKTOP_CODE. 
 # Authors: Dave
 
 # Copyright (C) antiXCommunity http://antix.freeforums.org

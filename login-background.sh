@@ -1,7 +1,7 @@
 #!/bin/bash
-# Dependencies: xsetroot, feh, rox (pinboard)
+# Dependencies: xsetroot, feh, rox (pinboard), bash, yad, grep, cat, sed
 # File Name: login_background.sh
-# Version: 1.5.0
+# Version: 2.0
 # Purpose:  controls the setting of backgrounds for default antiX window managers through feh / rox / xsetroot
 # Authors: John, Dave
 

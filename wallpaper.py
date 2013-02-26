@@ -31,6 +31,7 @@ pygtk.require('2.0')
 import os
 import re
 import sys
+from desktop_tool import DesktopToolWidget
 from desktop_tool import get_icon as get_icon
 
 #Set variables
@@ -102,8 +103,8 @@ class Build_Picture:
         Build_Picture.image.show()
           
     def build_image(self, image):
-        Build_Picture.pix = gtk.gdk.pixbuf_new_from_file(image)
-        Build_Picture.pix = Build_Picture.pix.scale_simple(300, 200, gtk.gdk.INTERP_BILINEAR)
+        Build_Picture.pix = gtk.gdk.pixbuf_new_from_file_at_scale(image,300,200,True)
+        #Build_Picture.pix = Build_Picture.pix.scale_simple(300, 200, gtk.gdk.INTERP_BILINEAR)
         Build_Picture.image = gtk.image_new_from_pixbuf(Build_Picture.pix)
         MainWindow.imagebox.pack_start(Build_Picture.image)
         Build_Picture.image.show()
@@ -415,29 +416,39 @@ class MainWindow:
       else:
 		  self.combo2.hide()
 
-      self.folderbutton = gtk.Button(stock=gtk.STOCK_OPEN)
+      self.folderbutton = gtk.Button()
+      icon_button = DesktopToolWidget('Select Folder', 'document-open-folder', 30, gtk.ORIENTATION_HORIZONTAL, wrap = 7)
+      self.folderbutton.add(icon_button)
       self.folderbutton.connect("clicked", Folder_Select)
-      self.folderbutton.set_size_request(0,50)
+      self.folderbutton.set_size_request(100,50)
       self.folderbutton.hide()
 
-      self.picturebutton = gtk.Button(stock=gtk.STOCK_OPEN)
+      self.picturebutton = gtk.Button()
+      icon_button = DesktopToolWidget("Select Picture", 'insert-image', 30, gtk.ORIENTATION_HORIZONTAL, wrap = 7)
+      self.picturebutton.add(icon_button)
       self.picturebutton.connect("clicked", Picture_Select)
-      self.picturebutton.set_size_request(0,50)
+      self.picturebutton.set_size_request(100,50)
       self.picturebutton.show()
 
-      self.colorbutton = gtk.Button(stock=gtk.STOCK_OPEN)
+      self.colorbutton = gtk.Button()
+      icon_button = DesktopToolWidget('Select Color', 'color-picker', 30, gtk.ORIENTATION_HORIZONTAL, wrap = 7)
+      self.colorbutton.add(icon_button)
       self.colorbutton.connect("clicked", ColorSelect)
-      self.colorbutton.set_size_request(0,50)
+      self.colorbutton.set_size_request(100,50)
       self.colorbutton.hide()
       
-      self.closebutton = gtk.Button(stock=gtk.STOCK_CLOSE)
+      self.closebutton = gtk.Button()
+      icon_button = DesktopToolWidget('Close', 'dialog-close', 30, gtk.ORIENTATION_HORIZONTAL, wrap = 7)
+      self.closebutton.add(icon_button)
       self.closebutton.connect("clicked", lambda w: gtk.main_quit())
-      self.closebutton.set_size_request(0,50)
+      self.closebutton.set_size_request(100,50)
       self.closebutton.show()
       
-      self.okbutton = gtk.Button(stock=gtk.STOCK_OK)
+      self.okbutton = gtk.Button()
+      icon_button = DesktopToolWidget('Apply', 'dialog-ok-apply', 30, gtk.ORIENTATION_HORIZONTAL, wrap = 7)
+      self.okbutton.add(icon_button)
       self.okbutton.connect("clicked", self.set)
-      self.okbutton.set_size_request(0,50)
+      self.okbutton.set_size_request(100,50)
       self.okbutton.show()
       
       self.buttonbox = gtk.HButtonBox()

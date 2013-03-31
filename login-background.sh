@@ -23,28 +23,30 @@
 ################################################################################
 #################################################################
 
-type="$(cat $HOME/.antix-session/wallpaper/wallpaper.conf | grep '^TYPE' |cut -d '=' -f2 |cut -d " " -f2)"
-style="$(cat $HOME/.antix-session/wallpaper/wallpaper.conf | grep '^STYLE' |cut -d '=' -f2 |cut -d " " -f2)"
+type="$(cat $HOME/.antix-session/wallpaper.conf | grep '^TYPE' |cut -d '=' -f2 |cut -d " " -f2)"
+style="$(cat $HOME/.antix-session/wallpaper.conf | grep '^STYLE' |cut -d '=' -f2 |cut -d " " -f2)"
 session=$DESKTOP_CODE;
 
 random_select() {
-	WALLPAPERS="$(cat $HOME/.antix-session/wallpaper/wallpaper.conf | grep '^FOLDER' |cut -d '=' -f2 |cut -d " " -f2)"
+	WALLPAPERS="$(cat $HOME/.antix-session/wallpaper.conf | grep '^FOLDER' |cut -d '=' -f2 |cut -d " " -f2)"
     ALIST=( `ls -w1 $WALLPAPERS` )
     RANGE=${#ALIST[*]}
     SHOW=$(( $RANDOM % $RANGE ))
     FILE="$WALLPAPERS/${ALIST[$SHOW]}"
     SEDFILE=${FILE//\//\\\/}
-    sed -i "s/^SAVED=.*/SAVED=$SEDFILE/" $HOME/.antix-session/wallpaper/wallpaper.conf 
+    sed -i "s/^SAVED=.*/SAVED=$SEDFILE/" $HOME/.antix-session/wallpaper.conf 
 }
 wallpaper_set() {
 	
     local style=$1
     local pboard=$2
     
-    wallpaper=$(cat $HOME/.antix-session/wallpaper/wallpaper.conf | grep '^SAVED' |cut -d '=' -f2 |sed "s/\ /\\ /ig")
+    wallpaper=$(cat $HOME/.antix-session/wallpaper.conf | grep '^SAVED' |cut -d '=' -f2 |sed "s/\ /\\ /ig")
     
     if expr match "$session" "^rox-" &>/dev/null; then
     Rox-Wallpaper "$wallpaper" &
+    elif expr match "$session" "^space-" &>/dev/null; then
+    spacefm --set-wallpaper "$wallpaper" &
     fi
     feh  --bg-$style "$wallpaper" &
     #sleep 2 && ~/.antix-session/wallpaper/refresh-list &
@@ -74,7 +76,7 @@ set_type() {
             ;;
 
         color)
-            imported_color=$(cat $HOME/.antix-session/wallpaper/wallpaper.conf | grep '^COLOR' |cut -d '=' -f2 |cut -d " " -f2)
+            imported_color=$(cat $HOME/.antix-session/wallpaper.conf | grep '^COLOR' |cut -d '=' -f2 |cut -d " " -f2)
             xsetroot -solid "#$imported_color" &
             ;;
 

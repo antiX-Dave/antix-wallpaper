@@ -1,13 +1,30 @@
-copy antix-session to ~/.antix-session
-cp ./antix-session ~/.antix-session -r
-as root copy wallpaper.py to /usr/local/bin
+-copy wallpaper.conf to ~/.antix-session/wallpaper.conf and /usr/share/antix-settings/wallpaper/
+cp ./wallpaper.conf ~/.antix-session/wallpaper.conf
+-as root:
+cp ./wallpaper.conf /usr/share/antix-settings/wallpaper/wallpaper.conf
+-copy help.txt to /usr/share/antix-settings/wallpaper/ as root
+cp ./help.txt /usr/share/antix-settings/wallpaper/help.txt
+-as root copy wallpaper.py to /usr/local/bin
 cp ./wallpaper.py /usr/local/bin/wallpaper.py
-and give it execute permissions
+-and give it execute permissions
 chmod 755 /usr/local/bin/wallpaper.py
+-as root copy desktop_tool.py to /usr/local/bin
 cp ./desktop_tool.py /usr/local/bin/desktop_tool.py
-and give it execute permissions
+-and give it execute permissions
 chmod 755 /usr/local/bin/desktop_tool.py
+-as root copy login-background.sh to /usr/local/bin
 cp ./login-background.sh /usr/local/bin/login-background.sh
-and give it execute permissions
+-and give it execute permissions
 chmod 755 /usr/local/bin/login-background.sh
+
+#OUTDATED REMOVAL and REPLACE
+-remove: login_background.sh from /usr/local/bin
+-remove: ~/.wallpaper
+-remove: ~/.antix-session/wallpaper (if there)
+-remove: /etc/skel/.wallpaper
+-remove: /etc/skel/.antix-session/wallpaper (if there)
+-replace: referance to login_background.sh from ~/.xinitrc ~/.WM
+-replace: referance to login_background.sh from /etc/skel/.xinitrc ~/.WM
+Note: there only needs to be one referance for login-background.sh between the WM configuration and xinitrc.
+
 

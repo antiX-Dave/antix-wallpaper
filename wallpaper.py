@@ -37,11 +37,11 @@ from desktop_tool import get_icon as get_icon
 #Set variables
 class Var: 
     def write(self, variable, item):
-        text = file((Var.USER_HOME+"/.antix-session/wallpaper/wallpaper.conf.tmp"), "w")
+        text = file((Var.CONF_USER_FILE+".tmp"), "w")
         text.write ("")
         text.close()
-        text = file((Var.USER_HOME+"/.antix-session/wallpaper/wallpaper.conf.tmp"), "a")
-        for line in open(Var.USER_HOME+"/.antix-session/wallpaper/wallpaper.conf", "r").xreadlines():
+        text = file((Var.CONF_USER_FILE+".tmp"), "a")
+        for line in open(Var.CONF_USER_FILE, "r").xreadlines():
             if "#" not in line:
                 if variable in line:
                     text.write (variable+"="+item+"\n") 
@@ -50,7 +50,7 @@ class Var:
             else:
                 text.write (line) 
         text.close()
-        os.system("mv %s/.antix-session/wallpaper/wallpaper.conf.tmp %s/.antix-session/wallpaper/wallpaper.conf" % ((Var.USER_HOME), (Var.USER_HOME)))
+        os.system("mv %s.tmp %s" % ((Var.CONF_USER_FILE), (Var.CONF_USER_FILE)))
                         
     def read(self):        
         var = Var
@@ -62,8 +62,18 @@ class Var:
 			
         var.DESKTOP = re.sub(r'rox-', '', self.DESKTOP)
         var.USER_HOME = os.environ['HOME']
+        var.CONF_USER_DIR = var.USER_HOME+"/.antix-session/"
+        var.CONF_USER_FILE = var.CONF_USER_DIR+"wallpaper.conf"
+        var.CONF_SYSTEM_FILE = "/usr/share/antix-settings/wallpaper/wallpaper.conf"
+        
+        if not os.path.exists(var.CONF_USER_DIR):
+            os.system("mkdir %s" % (var.CONF_USER_DIR))
+            os.system("cp %s %s" % ((var.CONF_SYSTEM_FILE),(var.CONF_USER_DIR)))
+        else:
+            if not os.path.isfile(var.CONF_USER_FILE):
+                os.system("cp %s %s" % ((var.CONF_SYSTEM_FILE),(var.CONF_USER_DIR)))
             
-        for line in open(var.USER_HOME+"/.antix-session/wallpaper/wallpaper.conf", "r").xreadlines():
+        for line in open(var.CONF_USER_FILE, "r").xreadlines():
             if "#" not in line:
                 if re.search(r'^.*=', line):
                     pieces = line.split('=')

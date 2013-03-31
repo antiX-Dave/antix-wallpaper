@@ -1,8 +1,8 @@
 #!/usr/bin/env python
-# Dependencies: feh, rox (pinboard), login-background.sh, gtk, pygtk,
+# Dependencies: feh, rox (pinboard), login_background.sh, gtk, pygtk,
 # xset-root, desktop_tool, python os mod, python re mod, python sys mod
 # File Name: wallpaper.py
-# Version: 2.0
+# Version: 2.1
 # Purpose: allows the user to select a meathod for setting the wallpaper, 
 #          as well as a wallpaper / color / default folder based on their
 #          choice of options. Requires window manager session codename to
@@ -37,41 +37,54 @@ from desktop_tool import get_icon as get_icon
 #Set variables
 class Var: 
     def write(self, variable, item):
-        text = file((Var.CONF_USER_FILE+".tmp"), "w")
-        text.write ("")
+        if variable == "SAVED":
+            WRITE_FILE = Var.CONF_USER_FILE_WALLPAPERS+".tmp"
+            READ_FILE = Var.CONF_USER_FILE_WALLPAPERS
+            CONF_VARIABLE = Var.DESKTOP_CODE
+        else:
+            WRITE_FILE = Var.CONF_USER_FILE+".tmp"
+            READ_FILE = Var.CONF_USER_FILE
+            CONF_VARIABLE = variable
+        
+        text = file((WRITE_FILE), "w")
+        text.write("")
         text.close()
-        text = file((Var.CONF_USER_FILE+".tmp"), "a")
-        for line in open(Var.CONF_USER_FILE, "r").xreadlines():
+        text = file((WRITE_FILE), "a")
+        for line in open(READ_FILE, "r").xreadlines():
             if "#" not in line:
-                if variable in line:
-                    text.write (variable+"="+item+"\n") 
+                if re.search(r'^%s=' % (CONF_VARIABLE), line):
+                    text.write (CONF_VARIABLE+"="+item+"\n") 
                 else:
                     text.write (line) 
             else:
                 text.write (line) 
-        text.close()
-        os.system("mv %s.tmp %s" % ((Var.CONF_USER_FILE), (Var.CONF_USER_FILE)))
+        text.close()        
+        os.system("mv %s %s" % ((WRITE_FILE), (READ_FILE)))
                         
     def read(self):        
         var = Var
-        var.DESKTOP = os.environ['DESKTOP_CODE']
-        if re.search(r'rox', var.DESKTOP):
-			var.ROX = True
+        var.DESKTOP_CODE = os.environ['DESKTOP_CODE']
+        if re.search(r'rox|space', var.DESKTOP_CODE):
+			var.ICON_MANAGER = True
         else:
-			var.ROX = False
+			var.ICON_MANAGER = False
 			
-        var.DESKTOP = re.sub(r'rox-', '', self.DESKTOP)
+        var.DESKTOP = re.sub(r'rox-', '', self.DESKTOP_CODE)
         var.USER_HOME = os.environ['HOME']
         var.CONF_USER_DIR = var.USER_HOME+"/.antix-session/"
         var.CONF_USER_FILE = var.CONF_USER_DIR+"wallpaper.conf"
+        var.CONF_USER_FILE_WALLPAPERS = var.CONF_USER_DIR+"wallpaper-list.conf"
         var.CONF_SYSTEM_FILE = "/usr/share/antix-settings/wallpaper/wallpaper.conf"
+        var.CONF_SYSTEM_FILE_WALLPAPERS = "/usr/share/antix-settings/wallpaper/wallpaper-list.conf"
         
         if not os.path.exists(var.CONF_USER_DIR):
             os.system("mkdir %s" % (var.CONF_USER_DIR))
             os.system("cp %s %s" % ((var.CONF_SYSTEM_FILE),(var.CONF_USER_DIR)))
+            os.system("cp %s %s" % ((var.CONF_SYSTEM_FILE_WALLPAPERS),(var.CONF_USER_DIR)))
         else:
             if not os.path.isfile(var.CONF_USER_FILE):
                 os.system("cp %s %s" % ((var.CONF_SYSTEM_FILE),(var.CONF_USER_DIR)))
+                os.system("cp %s %s" % ((var.CONF_SYSTEM_FILE_WALLPAPERS),(var.CONF_USER_DIR)))
             
         for line in open(var.CONF_USER_FILE, "r").xreadlines():
             if "#" not in line:
@@ -82,19 +95,37 @@ class Var:
                     OBJECT=(pieces[1])
                     OBJECT = re.sub(r'\n', '', OBJECT)
                     setattr(var, var.VARIABLE, OBJECT)
+        
+        FOUND="0"            
+        print var.DESKTOP_CODE
+        for line in open(var.CONF_USER_FILE_WALLPAPERS, "r").xreadlines():
+            if "#" not in line:
+                if re.search(r'^%s=' % (var.DESKTOP_CODE), line):
+                    pieces = line.split('=')
+                    OBJECT = (pieces[1])
+                    OBJECT = re.sub(r'\n', '', OBJECT)
+                    var.SAVED = OBJECT
+                    FOUND = "1"
+                    print "found"
+		
+        if FOUND == "0":
+            text = file((var.CONF_USER_FILE_WALLPAPERS), "a")
+            text.write (var.DESKTOP_CODE+"="+var.DEFAULT+"\n") 
+            text.close
+            var.SAVED = var.DEFAULT
 
         var.IMAGE = var.SAVED
         var.CURRENTCOLOR = var.COLOR
 
 class Error:
     def __init__(self, error):
-       cmdstring = "yad --image=\"error\"\
-       --title=\"user-management error\"\
-       --text=\"user-management has run into an error,\
-       \nplease rerun and correct the following error!\
-       \n\n%s\n\"\
-       --button=\"gtk-ok:0\"" % (error)
-       os.system(cmdstring) 
+        cmdstring = "yad --image=\"error\"\
+        --title=\"user-management error\"\
+        --text=\"user-management has run into an error,\
+        \nplease rerun and correct the following error!\
+        \n\n%s\n\"\
+        --button=\"gtk-ok:0\"" % (error)
+        os.system(cmdstring) 
 
 class Build_Picture:
     def build_color(self):
@@ -259,7 +290,7 @@ class About:
         about.set_program_name("antiX Wallpaper")
         pixbuf = get_icon("wallpaper", 48)
         about.set_icon(pixbuf)
-        about.set_version("1.0.0")
+        about.set_version("2.1.0")
         about.set_copyright("(c)the antiX community")
         about.set_comments("This is an antiX application for setting the wallpaper on the preinstalled window managers")
         about.set_website("http://antix.freeforums.org")
@@ -274,22 +305,22 @@ class MainWindow:
             Var().write('TYPE', 'static')
             Var().write('STYLE', style)
             Var().write('SAVED', Var.IMAGE)
-            os.system("login-background.sh &")
+            os.system("login_background.sh &")
           
         def No_Wallpaper():
             Var().write('TYPE', 'color')
             Var().write('COLOR', Var.CURRENTCOLOR)
-            os.system("login-background.sh &")
+            os.system("login_background.sh &")
           
         def Random_Wallpaper():
             Var().write('TYPE', 'random')
             Var().write('STYLE', style)
-            os.system("login-background.sh &")
+            os.system("login_background.sh &")
           
         def Random_Wallpaper_Timed():
             Var().write('TYPE', 'random-time')
             Var().write('STYLE', style)
-            os.system("login-background.sh &")
+            os.system("login_background.sh &")
         
         model = self.combo2.get_model()
         index = self.combo2.get_active()
@@ -305,7 +336,7 @@ class MainWindow:
             self.colorbutton.hide()
             self.folderbutton.hide()
             self.picturebutton.show()
-            if Var.ROX != True:
+            if Var.ICON_MANAGER != True:
                 self.combo2.show()
             else:
 		        self.combo2.hide()
@@ -324,7 +355,7 @@ class MainWindow:
             self.colorbutton.hide()
             self.picturebutton.hide()
             self.folderbutton.show()
-            if Var.ROX != True:
+            if Var.ICON_MANAGER != True:
                 self.combo2.show()
             else:
 		        self.combo2.hide()
@@ -335,7 +366,7 @@ class MainWindow:
             self.colorbutton.hide()
             self.picturebutton.hide()
             self.folderbutton.show()
-            if Var.ROX != True:
+            if Var.ICON_MANAGER != True:
                 self.combo2.show()
             else:
 		        self.combo2.hide()
@@ -407,7 +438,7 @@ class MainWindow:
 
       self.combo = gtk.combo_box_new_text()
       self.combo.append_text("Static")
-      if Var.ROX != True:
+      if Var.ICON_MANAGER != True:
           self.combo.append_text("No Wallpaper")
       self.combo.append_text("Random Wallpaper")
       self.combo.append_text("Random Wallpaper Timed")
@@ -421,7 +452,7 @@ class MainWindow:
       self.combo2.append_text("center")
       self.combo2.append_text("fill")
       self.combo2.set_active(0)
-      if Var.ROX != True:
+      if Var.ICON_MANAGER != True:
           self.combo2.show()
       else:
 		  self.combo2.hide()

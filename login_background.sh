@@ -34,21 +34,24 @@ random_select() {
     SHOW=$(( $RANDOM % $RANGE ))
     FILE="$WALLPAPERS/${ALIST[$SHOW]}"
     SEDFILE=${FILE//\//\\\/}
-    sed -i "s/^SAVED=.*/SAVED=$SEDFILE/" $HOME/.antix-session/wallpaper.conf 
+    sed -i "s/^$session=.*/$session=$SEDFILE/" $HOME/.antix-session/wallpaper-list.conf 
 }
 wallpaper_set() {
 	
     local style=$1
     local pboard=$2
     
-    wallpaper=$(cat $HOME/.antix-session/wallpaper.conf | grep '^SAVED' |cut -d '=' -f2 |sed "s/\ /\\ /ig")
+    wallpaper=$(cat $HOME/.antix-session/wallpaper-list.conf | grep "^$session" |cut -d '=' -f2 |sed "s/\ /\\ /ig")
     
     if expr match "$session" "^rox-" &>/dev/null; then
     Rox-Wallpaper "$wallpaper" &
+    feh  --bg-scale "$wallpaper" &
     elif expr match "$session" "^space-" &>/dev/null; then
     spacefm --set-wallpaper "$wallpaper" &
-    fi
+    else
     feh  --bg-$style "$wallpaper" &
+    fi
+    
     #sleep 2 && ~/.antix-session/wallpaper/refresh-list &
 
 }

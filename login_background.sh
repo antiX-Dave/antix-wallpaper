@@ -66,7 +66,7 @@ set_type() {
             ;;
 
         random-time)
-            yad --notification --command="killall 'login-background.sh' 'yad'" --text="click this icon to kill random wallpaper timed" --image="wallpaper" & pid1="$!"
+            yad --notification --command="killall 'login_background.sh' 'yad'" --text="click this icon to kill random wallpaper timed" --image="wallpaper" & pid1="$!"
 			while true; do
 			    random_select
 			    wallpaper_set "$style"

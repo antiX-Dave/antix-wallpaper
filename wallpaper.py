@@ -63,14 +63,16 @@ class Var:
                         
     def read(self):        
         var = Var
-        var.DESKTOP_CODE = os.environ['DESKTOP_CODE']
+        var.USER_HOME = os.environ['HOME']
+        var.DISPLAY = os.environ['DISPLAY']
+        with open(var.USER_HOME+"/.antix-session/desktop-code"+var.DISPLAY, "r") as f:
+            var.DESKTOP_CODE = f.readline()
+            var.DESKTOP_CODE = re.sub(r'\n', '', var.DESKTOP_CODE)
+        var.DESKTOP = re.sub(r'.*-', '', var.DESKTOP_CODE)
         if re.search(r'rox|space', var.DESKTOP_CODE):
 			var.ICON_MANAGER = True
         else:
 			var.ICON_MANAGER = False
-			
-        var.DESKTOP = re.sub(r'rox-', '', self.DESKTOP_CODE)
-        var.USER_HOME = os.environ['HOME']
         var.CONF_USER_DIR = var.USER_HOME+"/.antix-session/"
         var.CONF_USER_FILE = var.CONF_USER_DIR+"wallpaper.conf"
         var.CONF_USER_FILE_WALLPAPERS = var.CONF_USER_DIR+"wallpaper-list.conf"
@@ -106,7 +108,6 @@ class Var:
                     OBJECT = re.sub(r'\n', '', OBJECT)
                     var.SAVED = OBJECT
                     FOUND = "1"
-                    print "found"
 		
         if FOUND == "0":
             text = file((var.CONF_USER_FILE_WALLPAPERS), "a")

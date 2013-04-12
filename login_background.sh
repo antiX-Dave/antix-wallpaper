@@ -23,25 +23,25 @@
 ################################################################################
 #################################################################
 
-type="$(cat $HOME/.antix-session/wallpaper.conf | grep '^TYPE' |cut -d '=' -f2 |cut -d " " -f2)"
-style="$(cat $HOME/.antix-session/wallpaper.conf | grep '^STYLE' |cut -d '=' -f2 |cut -d " " -f2)"
+type="$(cat $HOME/.antiX-session/wallpaper.conf | grep '^TYPE' |cut -d '=' -f2 |cut -d " " -f2)"
+style="$(cat $HOME/.antiX-session/wallpaper.conf | grep '^STYLE' |cut -d '=' -f2 |cut -d " " -f2)"
 session=$DESKTOP_CODE;
 
 random_select() {
-	WALLPAPERS="$(cat $HOME/.antix-session/wallpaper.conf | grep '^FOLDER' |cut -d '=' -f2 |cut -d " " -f2)"
+	WALLPAPERS="$(cat $HOME/.antiX-session/wallpaper.conf | grep '^FOLDER' |cut -d '=' -f2 |cut -d " " -f2)"
     ALIST=( `ls -w1 $WALLPAPERS` )
     RANGE=${#ALIST[*]}
     SHOW=$(( $RANDOM % $RANGE ))
     FILE="$WALLPAPERS/${ALIST[$SHOW]}"
     SEDFILE=${FILE//\//\\\/}
-    sed -i "s/^$session=.*/$session=$SEDFILE/" $HOME/.antix-session/wallpaper-list.conf 
+    sed -i "s/^$session=.*/$session=$SEDFILE/" $HOME/.antiX-session/wallpaper-list.conf 
 }
 wallpaper_set() {
 	
     local style=$1
     local pboard=$2
     
-    wallpaper=$(cat $HOME/.antix-session/wallpaper-list.conf | grep "^$session" |cut -d '=' -f2 |sed "s/\ /\\ /ig")
+    wallpaper=$(cat $HOME/.antiX-session/wallpaper-list.conf | grep "^$session" |cut -d '=' -f2 |sed "s/\ /\\ /ig")
     
     if expr match "$session" "^rox-" &>/dev/null; then
     Rox-Wallpaper "$wallpaper" &
@@ -52,7 +52,7 @@ wallpaper_set() {
     feh  --bg-$style "$wallpaper" &
     fi
     
-    #sleep 2 && ~/.antix-session/wallpaper/refresh-list &
+    #sleep 2 && ~/.antiX-session/wallpaper/refresh-list &
 
 }
 set_type() {
@@ -79,7 +79,7 @@ set_type() {
             ;;
 
         color)
-            imported_color=$(cat $HOME/.antix-session/wallpaper.conf | grep '^COLOR' |cut -d '=' -f2 |cut -d " " -f2)
+            imported_color=$(cat $HOME/.antiX-session/wallpaper.conf | grep '^COLOR' |cut -d '=' -f2 |cut -d " " -f2)
             xsetroot -solid "#$imported_color" &
             ;;
 

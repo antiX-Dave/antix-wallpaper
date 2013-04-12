@@ -1,6 +1,6 @@
--copy wallpaper.conf and wallpaper-list.conf to ~/.antix-session/ and /usr/share/antix-settings/wallpaper/
-cp ./wallpaper.conf ~/.antix-session/wallpaper.conf
-cp ./wallpaper-list.conf ~/.antix-session/wallpaper-list.conf
+-copy wallpaper.conf and wallpaper-list.conf to ~/.antiX-session/ and /usr/share/antix-settings/wallpaper/
+cp ./wallpaper.conf ~/.antiX-session/wallpaper.conf
+cp ./wallpaper-list.conf ~/.antiX-session/wallpaper-list.conf
 -as root:
 cp ./wallpaper.conf /usr/share/antix-settings/wallpaper/wallpaper.conf
 cp ./wallpaper-list.conf /usr/share/antix-settings/wallpaper/wallpaper-list.conf
@@ -22,9 +22,9 @@ chmod 755 /usr/local/bin/login_background.sh
 #OUTDATED REMOVAL and REPLACE
 -replace: login_background.sh from /usr/local/bin
 -remove: ~/.wallpaper
--remove: ~/.antix-session/wallpaper (if there)
+-remove: ~/.antiX-session/wallpaper (if there)
 -remove: /etc/skel/.wallpaper
--remove: /etc/skel/.antix-session/wallpaper (if there)
+-remove: /etc/skel/.antiX-session/wallpaper (if there)
 Note: there only needs to be one referance for login_background.sh between the WM configuration and xinitrc.
 
 

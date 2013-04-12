@@ -65,7 +65,7 @@ class Var:
         var = Var
         var.USER_HOME = os.environ['HOME']
         var.DISPLAY = os.environ['DISPLAY']
-        with open(var.USER_HOME+"/.antix-session/desktop-code"+var.DISPLAY, "r") as f:
+        with open(var.USER_HOME+"/.antiX-session/desktop-code"+var.DISPLAY, "r") as f:
             var.DESKTOP_CODE = f.readline()
             var.DESKTOP_CODE = re.sub(r'\n', '', var.DESKTOP_CODE)
         var.DESKTOP = re.sub(r'.*-', '', var.DESKTOP_CODE)
@@ -73,7 +73,7 @@ class Var:
 			var.ICON_MANAGER = True
         else:
 			var.ICON_MANAGER = False
-        var.CONF_USER_DIR = var.USER_HOME+"/.antix-session/"
+        var.CONF_USER_DIR = var.USER_HOME+"/.antiX-session/"
         var.CONF_USER_FILE = var.CONF_USER_DIR+"wallpaper.conf"
         var.CONF_USER_FILE_WALLPAPERS = var.CONF_USER_DIR+"wallpaper-list.conf"
         var.CONF_SYSTEM_FILE = "/usr/share/antix-settings/wallpaper/wallpaper.conf"

@@ -25,7 +25,7 @@
 
 type="$(cat $HOME/.antiX-session/wallpaper.conf | grep '^TYPE' |cut -d '=' -f2 |cut -d " " -f2)"
 style="$(cat $HOME/.antiX-session/wallpaper.conf | grep '^STYLE' |cut -d '=' -f2 |cut -d " " -f2)"
-session=$DESKTOP_CODE;
+session=$(cat $HOME/.antiX-session/desktop-code$DISPLAY);
 
 random_select() {
 	WALLPAPERS="$(cat $HOME/.antiX-session/wallpaper.conf | grep '^FOLDER' |cut -d '=' -f2 |cut -d " " -f2)"

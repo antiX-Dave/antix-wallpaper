@@ -1,8 +1,8 @@
 #!/usr/bin/env python
-# Dependencies: feh, rox (pinboard), spacefm, desktop-session-wallpaper, gtk, pygtk,
+# Dependencies: feh, rox (pinboard), login_background.sh, gtk, pygtk,
 # xset-root, desktop_tool, python os mod, python re mod, python sys mod
 # File Name: wallpaper.py
-# Version: 2.2
+# Version: 2.1
 # Purpose: allows the user to select a meathod for setting the wallpaper, 
 #          as well as a wallpaper / color / default folder based on their
 #          choice of options. Requires window manager session codename to
@@ -65,10 +65,7 @@ class Var:
         var = Var
         var.USER_HOME = os.environ['HOME']
         var.DISPLAY = os.environ['DISPLAY']
-        var.DISPLAY = re.sub(r':', '', var.DISPLAY)
-        var.DISPLAY_SPLIT = var.DISPLAY.split('.')
-        var.DISPLAY = var.DISPLAY_SPLIT[0]
-        with open(var.USER_HOME+"/.desktop-session/desktop-code."+var.DISPLAY, "r") as f:
+        with open(var.USER_HOME+"/.antiX-session/desktop-code"+var.DISPLAY, "r") as f:
             var.DESKTOP_CODE = f.readline()
             var.DESKTOP_CODE = re.sub(r'\n', '', var.DESKTOP_CODE)
         var.DESKTOP = re.sub(r'.*-', '', var.DESKTOP_CODE)
@@ -76,11 +73,11 @@ class Var:
 			var.ICON_MANAGER = True
         else:
 			var.ICON_MANAGER = False
-        var.CONF_USER_DIR = var.USER_HOME+"/.desktop-session/"
+        var.CONF_USER_DIR = var.USER_HOME+"/.antiX-session/"
         var.CONF_USER_FILE = var.CONF_USER_DIR+"wallpaper.conf"
         var.CONF_USER_FILE_WALLPAPERS = var.CONF_USER_DIR+"wallpaper-list.conf"
-        var.CONF_SYSTEM_FILE = "/etc/desktop-session/wallpaper.conf"
-        var.CONF_SYSTEM_FILE_WALLPAPERS = "/etc/desktop-session/wallpaper-list.conf"
+        var.CONF_SYSTEM_FILE = "/usr/share/antix-settings/wallpaper/wallpaper.conf"
+        var.CONF_SYSTEM_FILE_WALLPAPERS = "/usr/share/antix-settings/wallpaper/wallpaper-list.conf"
         
         if not os.path.exists(var.CONF_USER_DIR):
             os.system("mkdir %s" % (var.CONF_USER_DIR))
@@ -309,22 +306,22 @@ class MainWindow:
             Var().write('TYPE', 'static')
             Var().write('STYLE', style)
             Var().write('SAVED', Var.IMAGE)
-            os.system("desktop-session-wallpaper &")
+            os.system("login_background.sh &")
           
         def No_Wallpaper():
             Var().write('TYPE', 'color')
             Var().write('COLOR', Var.CURRENTCOLOR)
-            os.system("desktop-session-wallpaper &")
+            os.system("login_background.sh &")
           
         def Random_Wallpaper():
             Var().write('TYPE', 'random')
             Var().write('STYLE', style)
-            os.system("desktop-session-wallpaper &")
+            os.system("login_background.sh &")
           
         def Random_Wallpaper_Timed():
             Var().write('TYPE', 'random-time')
             Var().write('STYLE', style)
-            os.system("desktop-session-wallpaper &")
+            os.system("login_background.sh &")
         
         model = self.combo2.get_model()
         index = self.combo2.get_active()

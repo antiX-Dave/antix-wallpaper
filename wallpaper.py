@@ -31,6 +31,8 @@ pygtk.require('2.0')
 import os
 import re
 import sys
+import gettext
+gettext.install("wallpaper", "/usr/share/locale")
 from desktop_tool import DesktopToolWidget
 from desktop_tool import get_icon as get_icon
 
@@ -110,6 +112,8 @@ class Var:
                     OBJECT = (pieces[1])
                     OBJECT = re.sub(r'\n', '', OBJECT)
                     var.SAVED = OBJECT
+                    if not os.path.isfile(var.SAVED):
+						var.SAVED = var.DEFAULT
                     FOUND = "1"
 		
         if FOUND == "0":
@@ -140,7 +144,7 @@ class Build_Picture:
         Build_Picture.draw.set_events(gtk.gdk.BUTTON_PRESS_MASK)
         Build_Picture.draw.modify_bg(gtk.STATE_NORMAL, Build_Picture.color)
         Build_Picture.image.pack_start(Build_Picture.draw)
-        Build_Picture.label = gtk.Label("Note: you cannot change the color with rox desktop")
+        Build_Picture.label = gtk.Label(_("Note: you cannot change the color with rox desktop"))
         Build_Picture.image.pack_start(Build_Picture.label)
         Build_Picture.label.show()
         Build_Picture.draw.show()
@@ -175,7 +179,7 @@ class Picture_Select:
         dialog.set_icon(pixbuf)
         
         filter = gtk.FileFilter()
-        filter.set_name("Images")
+        filter.set_name(_("Images"))
         filter.add_mime_type("image/png")
         filter.add_mime_type("image/jpeg")
         filter.add_mime_type("image/gif")
@@ -200,7 +204,7 @@ class Picture_Select:
           Build_Picture().build_image(Var.IMAGE)
           
         elif response == gtk.RESPONSE_CANCEL:
-  		  print "No file selected"  
+  		  print _("No file selected")  
         dialog.destroy()
       
 class Folder_Select:
@@ -212,7 +216,7 @@ class Folder_Select:
         dialog.set_default_response(gtk.RESPONSE_OK)
         
         filter = gtk.FileFilter()
-        filter.set_name("All Files")
+        filter.set_name(_("All Files"))
         filter.add_pattern("*")
         dialog.add_filter(filter)
         
@@ -221,7 +225,7 @@ class Folder_Select:
           Var.FOLDER = dialog.get_filename()
           Var().write('FOLDER', Var.FOLDER)
         elif response == gtk.RESPONSE_CANCEL:
-  		  print "No file selected"  
+  		  print _("No file selected")  
         dialog.destroy()
        
 class ColorSelect:
@@ -262,7 +266,7 @@ class Help:
         help.set_position(gtk.WIN_POS_CENTER)
         help.set_size_request(350, 350)
         help.set_resizable(False)
-        help.set_title("antiX Wallpaper - help")
+        help.set_title(_("antiX Wallpaper - help"))
         pixbuf = get_icon("wallpaper", 48)
         help.set_icon(pixbuf)
   
@@ -296,7 +300,7 @@ class About:
         about.set_icon(pixbuf)
         about.set_version("2.1.0")
         about.set_copyright("(c)the antiX community")
-        about.set_comments("This is an antiX application for setting the wallpaper on the preinstalled window managers")
+        about.set_comments(_("This is an antiX application for setting the wallpaper on the preinstalled window managers"))
         about.set_website("http://antix.freeforums.org")
         pixbuf = get_icon("wallpaper", 48)
         about.set_logo(pixbuf)
@@ -395,7 +399,7 @@ class MainWindow:
       self.menubar = gtk.MenuBar()
 
       self.menu = gtk.Menu()
-      self.filemenu = gtk.MenuItem("Options")
+      self.filemenu = gtk.MenuItem(_("Options"))
       self.filemenu.set_submenu(self.menu)
       self.filemenu.show()
       
@@ -410,19 +414,19 @@ class MainWindow:
       self.menu.append(self.aboutmenu)
 
       self.foldermenu = gtk.ImageMenuItem(gtk.STOCK_OPEN)
-      self.foldermenu.set_label("Default Folder")
+      self.foldermenu.set_label(_("Default Folder"))
       self.foldermenu.connect("activate", Folder_Select)
       self.foldermenu.show()
       self.menu.append(self.foldermenu)
 
       self.imagemenu = gtk.ImageMenuItem(gtk.STOCK_OPEN)
-      self.imagemenu.set_label("Open Image")
+      self.imagemenu.set_label(_("Open Image"))
       self.imagemenu.connect("activate", Picture_Select)
       self.imagemenu.show()
       self.menu.append(self.imagemenu)
 
       self.colormenu = gtk.ImageMenuItem(gtk.STOCK_OPEN)
-      self.colormenu.set_label("Default Color")
+      self.colormenu.set_label(_("Default Color"))
       self.colormenu.connect("activate", ColorSelect)
       self.colormenu.show()
       self.menu.append(self.colormenu)

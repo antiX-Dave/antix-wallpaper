@@ -15,7 +15,7 @@ random_select() {
 
 wallpaper_set() {
     
-    wallpaper=${wallpaper:-$(cat $wallpaper_list_conf | grep "^$code" |cut -d '=' -f2 |sed "s/\ /\\\ /ig")}
+    wallpaper=${wallpaper:-$(cat $wallpaper_list_conf | grep "^$code" |cut -d '=' -f2 )} #|sed "s/\ /\\\ /ig")}
     
     case $im in
         rox)
@@ -61,10 +61,6 @@ case "$type" in
         ;;
         
     random-time)
-        if [ -z $delay ]; then
-           yad --image='error' --text='No delay value set, defaulting to 5 min';
-           delay='300'
-        fi
         yad --notification --command="killall 'desktop-session-wallpaper' 'yad'" --text="click this icon to kill random wallpaper timed" --image="wallpaper" & pid1="$!"
         while true; do
             random_select
